@@ -4,7 +4,7 @@ import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
 import {Button, Checkbox, IconButton} from '@material-ui/core';
 import {Delete} from '@material-ui/icons';
-import {Task} from "./state/Taks";
+import {Task} from "./Taks";
 
 export type TaskType = {
     id: string
