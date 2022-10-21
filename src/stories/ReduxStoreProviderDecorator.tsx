@@ -4,7 +4,7 @@ import { combineReducers, createStore } from 'redux'
 import { v1 } from 'uuid'
 import { tasksReducer } from '../state/tasks-reducer'
 import { todolistsReducer } from '../state/todolists-reducer'
-import {AppRootState} from "../state/store";
+import {AppRootState} from "../app/store";
 import {TaskPriorities, TaskStatuses} from "../api/tasks-api";
 
 const rootReducer = combineReducers({
