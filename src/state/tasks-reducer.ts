@@ -6,7 +6,8 @@ import {
 import {TaskPriorities, tasksAPI, TaskStatuses, TaskType, UpdateTaskModelType} from "../api/tasks-api";
 import {AppRootState, AppThunk} from "../app/store";
 import {TasksStateType} from "../app/App";
-import {setErrorAC, setStatusAC} from "../app/app-reducer";
+import {setAppErrorAC, setAppStatusAC} from "../app/app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 
 const initialState: TasksStateType = {}
 
@@ -65,11 +66,11 @@ export const setTasksAC = (tasks: Array<TaskType>, todolistId: string): SetTasks
 //============================================ THUNKS =============================================
 
 export const fetchTasksTC = (todolistId: string): AppThunk => (dispatch) => {
-    dispatch(setStatusAC('loading'))
+    dispatch(setAppStatusAC('loading'))
     tasksAPI.getTasks(todolistId)
         .then(res => {
             dispatch(setTasksAC(res.data.items, todolistId))
-            dispatch(setStatusAC('succeeded'))
+            dispatch(setAppStatusAC('succeeded'))
         })
 }
 
@@ -81,21 +82,19 @@ export const removeTaskTC = (todoId: string, taskId: string): AppThunk => (dispa
 }
 
 export const addTaskTC = (todoId: string, title: string): AppThunk => (dispatch) => {
-    dispatch(setStatusAC('loading'))
+    dispatch(setAppStatusAC('loading'))
     tasksAPI.createTask(todoId, title)
         .then(res => {
             if (res.data.resultCode === 0) {
                 console.log(res)
                 dispatch(addTaskAC(res.data.data.item))
-                dispatch(setStatusAC('succeeded'))
+                dispatch(setAppStatusAC('succeeded'))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(setErrorAC(res.data.messages[0]))
-                } else {
-                    dispatch(setErrorAC('some error occurred'))
-                }
-                dispatch(setStatusAC('failed'))
+                handleServerAppError(res.data, dispatch)
             }
+        })
+        .catch((error) => {
+            handleServerNetworkError(error, dispatch)
         })
 }
 
@@ -119,7 +118,14 @@ export const updateTask = (todoId: string, taskId: string, domainModel: UpdateDo
 
     tasksAPI.updateTask(todoId, taskId, apiModel)
         .then(res => {
-            dispatch(updateTaskAC(taskId, domainModel, todoId))
+            if (res.data.resultCode === 0) {
+                dispatch(updateTaskAC(taskId, domainModel, todoId))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
+        })
+        .catch((error) => {
+            handleServerNetworkError(error, dispatch)
         })
 }
 
