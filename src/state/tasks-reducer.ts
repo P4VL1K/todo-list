@@ -86,7 +86,6 @@ export const addTaskTC = (todoId: string, title: string): AppThunk => (dispatch)
     tasksAPI.createTask(todoId, title)
         .then(res => {
             if (res.data.resultCode === 0) {
-                console.log(res)
                 dispatch(addTaskAC(res.data.data.item))
                 dispatch(setAppStatusAC('succeeded'))
             } else {

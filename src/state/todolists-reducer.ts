@@ -2,6 +2,7 @@ import {v1} from "uuid";
 import {todolistsAPI, TodolistType} from "../api/todolists-api";
 import {AppThunk} from "../app/store";
 import {RequestStatusType, setAppStatusAC} from "../app/app-reducer";
+import {handleServerNetworkError} from "../utils/error-utils";
 
 
 
@@ -60,6 +61,9 @@ export const fetchTodolistsTC = (): AppThunk => (dispatch) => {
         .then(res => {
             dispatch(setTodolistsAC(res.data))
             dispatch(setAppStatusAC('succeeded'))
+        })
+        .catch(error => {
+            handleServerNetworkError(error, dispatch)
         })
 }
 
