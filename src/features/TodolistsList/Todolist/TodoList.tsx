@@ -6,9 +6,8 @@ import {Delete} from '@material-ui/icons';
 import {Task} from "./Task/Taks";
 import {TaskStatuses, TaskType} from "../../../api/tasks-api";
 import {FilterValuesType, TodolistDomainType} from "../../../state/todolists-reducer";
-import {AppRootState, useAppDispatch} from "../../../app/store";
+import {useAppDispatch} from "../../../app/store";
 import {fetchTasksTC} from "../../../state/tasks-reducer";
-import {useSelector} from "react-redux";
 
 type PropsType = {
     todolist: TodolistDomainType
@@ -46,12 +45,16 @@ export const Todolist = React.memo( (props: PropsType) => {
 
     let tasksForTodolist = props.tasks
 
+    console.log(props.todolist.filter)
+
     if (props.todolist.filter === "active") {
         tasksForTodolist = props.tasks.filter(t => t.status === TaskStatuses.New);
     }
     if (props.todolist.filter === "completed") {
         tasksForTodolist = props.tasks.filter(t => t.status === TaskStatuses.Completed);
     }
+
+    console.log(props.tasks)
 
     return <div>
         <h3> <EditableSpan value={props.todolist.title} onChange={changeTodolistTitle} />
@@ -62,7 +65,7 @@ export const Todolist = React.memo( (props: PropsType) => {
         <AddItemForm addItem={addTask}/>
         <div>
             {
-                props.tasks.map(t => <Task
+                tasksForTodolist.map(t => <Task
                     task={t}
                     changeTaskTitle={props.changeTaskTitle}
                     todolistId={props.todolist.id}

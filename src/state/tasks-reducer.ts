@@ -6,7 +6,7 @@ import {
 import {TaskPriorities, tasksAPI, TaskStatuses, TaskType, UpdateTaskModelType} from "../api/tasks-api";
 import {AppRootState, AppThunk} from "../app/store";
 import {TasksStateType} from "../app/App";
-import {setAppErrorAC, setAppStatusAC} from "../app/app-reducer";
+import {setAppStatusAC} from "../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 
 const initialState: TasksStateType = {}
@@ -17,7 +17,6 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
             return {...state, [action.todolistId]: state[action.todolistId].filter(t => t.id !== action.taskId)}
         case 'ADD-TASK':
             return {...state, [action.task.todoListId]: [action.task, ...state[action.task.todoListId]]}
-
         case 'UPDATE-TASK':
             return {...state, [action.todolistId]: state[action.todolistId].map(t => t.id === action.taskId ? {...t, ...action.model} : t)}
         case 'CHANGE-TASK-TITLE':
