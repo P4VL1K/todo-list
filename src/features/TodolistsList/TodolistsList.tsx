@@ -31,29 +31,29 @@ export const TodolistsList = () => {
     }, [])
 
     const removeTask = useCallback((id: string, todolistId: string) => {
-        dispatch(removeTaskTC(todolistId, id))
+        dispatch(removeTaskTC({todoId: todolistId, taskId: id}))
     }, [])
     const addTask = useCallback((title: string, todolistId: string) => {
-        dispatch(addTaskTC(todolistId, title))
+        dispatch(addTaskTC({todoId: todolistId, title}))
     }, [])
     const changeStatus = useCallback((id: string, status: TaskStatuses, todolistId: string) => {
-        dispatch(updateTask(todolistId, id, {status}))
+        dispatch(updateTask({todoId: todolistId, taskId: id, domainModel: {status}}))
     }, [])
     const changeTaskTitle = useCallback((id: string, newTitle: string, todolistId: string) => {
-        dispatch(changeTaskTitleAC(id, newTitle, todolistId))
+        dispatch(changeTaskTitleAC({taskId: id, title: newTitle, todolistId}))
     }, [])
     const changeFilter = useCallback((value: FilterValuesType, todolistId: string) => {
-        dispatch(changeTodolistFilterAC(todolistId, value))
+        dispatch(changeTodolistFilterAC({todolistId, filter: value}))
     }, [])
     const removeTodolist = useCallback((id: string) => {
-        const action = removeTodolistTC(id)
+        const action = removeTodolistTC({todolistId: id})
         dispatch(action)
     }, [])
     const changeTodolistTitle = useCallback((id: string, title: string) => {
-        dispatch(changeTodolistTitleTC(id, title))
+        dispatch(changeTodolistTitleTC({todoId: id, title}))
     }, [])
     const addTodolist = useCallback((title: string) => {
-        const action = addTodolistTC(title)
+        const action = addTodolistTC({title})
         dispatch(action)
     }, [])
 

@@ -4,14 +4,16 @@ import { combineReducers, createStore } from 'redux'
 import { v1 } from 'uuid'
 import { tasksReducer } from '../state/tasks-reducer'
 import { todolistsReducer } from '../state/todolists-reducer'
-import {AppRootState} from "../app/store";
+import {AppRootState, RootReducerType} from "../app/store";
 import {TaskPriorities, TaskStatuses} from "../api/tasks-api";
 import {appReducer} from "../app/app-reducer";
+import {authReducer} from "../state/auth-reducer";
 
-const rootReducer = combineReducers({
+const rootReducer: RootReducerType = combineReducers({
     tasks: tasksReducer,
     todolists: todolistsReducer,
-    app: appReducer
+    app: appReducer,
+    auth: authReducer
 })
 
 const initialGlobalState = {
